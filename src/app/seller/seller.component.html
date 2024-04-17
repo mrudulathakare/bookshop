@@ -1,0 +1,80 @@
+<div class="seller-container max-w-lg mx-auto bg-white p-8 rounded shadow-md">
+  <h2 class="text-2xl font-semibold mb-4">Seller Dashboard</h2>
+
+  <form [formGroup]="bookForm" (ngSubmit)="addBook()" class="space-y-4">
+    <div class="form-group">
+      <label for="name" class="block">Name:</label>
+      <input type="text" id="name" formControlName="name" class="form-input" />
+    </div>
+    <div class="form-group">
+      <label for="author" class="block">Author:</label>
+      <input
+        type="text"
+        id="author"
+        formControlName="author"
+        class="form-input"
+      />
+    </div>
+    <div class="form-group">
+      <label for="image" class="block">Image URL:</label>
+      <input
+        type="text"
+        id="image"
+        formControlName="image"
+        class="form-input"
+      />
+    </div>
+    <div class="form-group">
+      <label for="price" class="block">Price:</label>
+      <input
+        type="number"
+        id="price"
+        formControlName="price"
+        class="form-input"
+      />
+    </div>
+    <button
+      type="submit"
+      [disabled]="!bookForm.valid"
+      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+    >
+      Add New Book
+    </button>
+  </form>
+
+  <table class="mt-8">
+    <thead>
+      <tr>
+        <th class="px-4 py-2">Name</th>
+        <th class="px-4 py-2">Author</th>
+        <th class="px-4 py-2">Image</th>
+        <th class="px-4 py-2">Price</th>
+        <th class="px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books">
+        <td class="px-4 py-2">{{ book.name }}</td>
+        <td class="px-4 py-2">{{ book.author }}</td>
+        <td class="px-4 py-2">
+          <img [src]="book.image" alt="Book Image" width="50" />
+        </td>
+        <td class="px-4 py-2">{{ book.price }}</td>
+        <td class="px-4 py-2">
+          <button
+            (click)="editBook(book)"
+            class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+          >
+            Edit
+          </button>
+          <button
+            (click)="removeBook(book.id)"
+            class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
+          >
+            Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

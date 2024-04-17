@@ -1,0 +1,23 @@
+<div class="register-container max-w-md mx-auto bg-white p-8 rounded shadow-md">
+  <h2 class="text-2xl font-semibold mb-4">Register</h2>
+  <form #ngForm="ngForm" class="space-y-4">
+    <div class="form-group">
+      <label class="block">Email:</label>
+      <input type="email" required [(ngModel)]="form.email" name="email" #email="ngModel" placeholder="Enter your email" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="block">Name:</label>
+      <input type="text" name="name" [(ngModel)]="form.name" placeholder="Enter your name" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="block">Password:</label>
+      <input type="password" name="password" [(ngModel)]="form.password" placeholder="Enter your password" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="block">Confirm Password:</label>
+      <input type="password" name="confirm_password" [(ngModel)]="form.confirm_password" placeholder="Enter your password" class="form-input">
+    </div>
+    <button (click)="register()" [disabled]="ngForm.invalid" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Register</button>
+  </form>
+  <div *ngIf="registrationSuccess" class="text-green-500 mt-4">Registration successful!</div>
+</div>

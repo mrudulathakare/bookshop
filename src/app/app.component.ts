@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from './firebase.config';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'MyBookApp';
+  ngOnInit() {
+    // Initialize Firebase
+initializeApp(firebaseConfig);
+}
 }

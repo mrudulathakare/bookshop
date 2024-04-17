@@ -1,0 +1,36 @@
+<div class="cart">
+  <h2 class="text-2xl font-semibold mb-4">My Cart</h2>
+  <table class="w-full border-collapse">
+    <thead>
+      <tr>
+        <th class="px-4 py-2 border">Book Name</th>
+        <th class="px-4 py-2 border">Price</th>
+        <th class="px-4 py-2 border">Quantity</th>
+        <th class="px-4 py-2 border">Total</th>
+        <th class="px-4 py-2 border">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of cartItems; let i = index" class="odd:bg-gray-100">
+        <td class="px-4 py-2 border">{{ item.name }}</td>
+        <td class="px-4 py-2 border">{{ item.price }}</td>
+        <td class="px-4 py-2 border">
+          <input
+            type="number"
+            [(ngModel)]="quantity[i]"
+            class="w-16 border rounded px-2 py-1"
+          />
+        </td>
+        <td class="px-4 py-2 border">{{ item.price * quantity[i] }}</td>
+        <td class="px-4 py-2 border">
+          <button
+            (click)="removeFromCart(item)"
+            class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
+          >
+            Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
