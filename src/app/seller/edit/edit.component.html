@@ -1,0 +1,42 @@
+<div class="container h-[90vh]">
+    <div class="flex justify-center items-center h-full">
+        <div class="row h-[90%] w-full shadow-lg">
+            <div class="col-md-6 bg-gray-50 h-full">
+                <img *ngIf="data && data.image" class="h-full max-h-full m-auto" [src]=form.image
+                    alt="Card image cap">
+
+                <img *ngIf="!data || !data.image" class="h-full max-h-full m-auto" [src]=form.image
+                    alt="No Image">
+            </div>
+            <div class="col-md-6 flex flex-col justify-center md:px-10">
+                <form #myForm="ngForm" (ngSubmit)="submit()">
+                    <label for="name" class="text-base font-semibold mb-1">Book name</label>
+                    <input type="text" id="name" name="name" placeholder="Book title" #name [(ngModel)]="form.name"
+                        class="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " />
+
+                    <label for="author" class="text-base font-semibold mb-1">Author</label>
+                    <input type="text" id="author" name="author" placeholder="Book author" #author [(ngModel)]="form.author"
+                        class="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " />
+
+                    <label for="image" class="text-base font-semibold mb-1">Image URL</label>
+                    <input type="text" id="image" name="image" placeholder="Image URL" #image
+                        [(ngModel)]="form.image"
+                        class="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " />
+
+                    <label for="price" class="text-base font-semibold mb-1">Price (₹)</label>
+                    <input type="text" id="price" name="price" placeholder="Price" #price [(ngModel)]="form.price"
+                        class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " />
+
+                    <button type="submit"
+                        class="md:me-auto sm:mx-auto relative group overflow-hidden mt-5 p-2 font-semibold border-2 block">
+                        <span
+                            class="absolute top-0 left-0 flex w-full h-0 mb-0 transition-all duration-200 ease-out transform translate-y-0 bg-gray-200 group-hover:h-full opacity-90"></span>
+                        <span class="relative">Submit changes</span>
+                    </button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>

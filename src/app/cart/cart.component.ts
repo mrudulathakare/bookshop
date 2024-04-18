@@ -8,26 +8,32 @@ import { Book } from '../book.service';
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
-// Define cart data
-cartItems: Book[] = []; 
+  // Define cart data
+  cartItems: Book[] = [];
+  totalPrice: any;
 
+  constructor(private cartService: CartService) {
+    this.cartItems = this.cartService.getCartData();
+    this.totalPrice = this.cartService.totalPrice();
+  }
 
-constructor(private cartService:CartService)
-{
-  this.cartItems = this.cartService.getCartItems();
-}
-quantity: number[] =this.cartService.quantity;
+  removeFromCart(item: any) {
+    this.cartService.removeFromCart(item)
+    this.cartItems = this.cartService.getCartData();
+    this.totalPrice = this.cartService.totalPrice();
+  }
 
+  reduceItemQuantity(itemId: number): void {
+    console.log(itemId);
+    this.cartService.updateCartProdQuantity(itemId, "sub");
+    this.cartItems = this.cartService.getCartData();
+    this.totalPrice = this.cartService.totalPrice();
+  }
 
-getIt()
-{
-  this.cartItems= this.cartService.getCartItems();
-  console.log(this.cartItems);
-}
-
-removeFromCart(item: any) {
-  this.cartService.removeFromCart(item); 
-    this.cartItems = this.cartService.getCartItems();
-
-}
+  addItemQuantity(itemId: number): void {
+    console.log(itemId);
+    this.cartService.updateCartProdQuantity(itemId, "add");
+    this.cartItems = this.cartService.getCartData();
+    this.totalPrice = this.cartService.totalPrice();
+  }
 }

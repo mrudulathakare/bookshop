@@ -6,8 +6,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BooksComponent } from './books/books.component';
-import { BookComponent } from './book/book.component';
+import { BooksComponent } from './feature/books/books.component';
+import { BookComponent } from './feature/book/book.component';
 
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
@@ -19,28 +19,29 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FeatureModule } from './feature/feature.module';
 import { BookService } from './book.service';
 import { CartService } from './cart/cart.service';
-import { FeatureComponent } from './feature/feature/feature.component';
+import { SearchComponent } from './search/search.component';
+import { TransformPipe } from "./shared/transform.pipe";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    BookComponent,
-    HeaderComponent,
-    CartComponent,
-    SellerComponent,
-    BooksComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    AuthModule,
-    ReactiveFormsModule,
-    FeatureModule,
-    // RouterModule.forRoot(routes)
-  ],
-
-  providers: [BookService, CartService, AuthService],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        BookComponent,
+        CartComponent,
+        SellerComponent,
+        BooksComponent,
+    ],
+    providers: [BookService, CartService, AuthService],
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        AuthModule,
+        ReactiveFormsModule,
+        SearchComponent,
+        HeaderComponent,
+        FeatureModule,
+        TransformPipe
+    ]
 })
 export class AppModule {}

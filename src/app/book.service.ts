@@ -1,20 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookService {
-  constructor() {}
-
-  setLocalBooks(books: Book[]): void {
-    localStorage.setItem('books', JSON.stringify(books));
-  }
-
-  getLocalBooks(): Book[] {
-    const lb = localStorage.getItem('books');
-    if (lb) return JSON.parse(lb);
-    return [];
-  }
+  private booksSubject = new BehaviorSubject<Book[]>([]);
+  books$: any = this.booksSubject.asObservable();
 
   books: Book[] = [
     {
@@ -122,11 +114,29 @@ export class BookService {
       price: 99,
     },
   ];
+  constructor() {
+    const localBooks = this.getLocalBooks();
+    if (localBooks.length > 0) {
+      this.booksSubject.next(localBooks);
+    } else {
+      this.setLocalBooks(this.books);
+    }
+  }
 
-  // Function to search books by name or author
+  setLocalBooks(books: Book[]): void {
+    localStorage.setItem('books', JSON.stringify(books));
+    this.booksSubject.next(books);
+  }
+
+  getLocalBooks(): Book[] {
+    const lb = localStorage.getItem('books');
+    if (lb) return JSON.parse(lb);
+    return [];
+  }
+
   searchBooks(searchQuery: string): Book[] {
     searchQuery = searchQuery.toLowerCase();
-    return this.books.filter(
+    return this.booksSubject.value.filter(
       (book) =>
         book.name.toLowerCase().includes(searchQuery) ||
         book.author.toLowerCase().includes(searchQuery)
@@ -134,24 +144,39 @@ export class BookService {
   }
 
   getBooks(): Book[] {
-    const localbooks = localStorage.getItem('books');
-    if (localbooks) return JSON.parse(localbooks);
-    return this.books;
+    return this.booksSubject.value;
   }
 
   addBook(newBook: Book): void {
-    this.books.push(newBook);
+    const updatedBooks = [...this.booksSubject.value, newBook];
+    this.setLocalBooks(updatedBooks);
   }
 
   removeBook(bookId: number): void {
-    this.books = this.books.filter((book) => book.id !== bookId);
+    const updatedBooks = this.booksSubject.value.filter(
+      (book) => book.id !== bookId
+    );
+    this.setLocalBooks(updatedBooks);
   }
 
   editBook(updatedBook: Book): void {
-    const index = this.books.findIndex((book) => book.id === updatedBook.id);
+    const index = this.booksSubject.value.findIndex(
+      (book) => book.id === updatedBook.id
+    );
     if (index !== -1) {
-      this.books[index] = updatedBook;
+      const updatedBooks = [...this.booksSubject.value];
+      updatedBooks[index] = updatedBook;
+      this.setLocalBooks(updatedBooks);
     }
+  }
+
+  updateBooks(books: Array<Book>) {
+    localStorage.setItem('books', JSON.stringify(books));
+    this.booksSubject.next(books);
+  }
+
+  getBookById(itemId: number) {
+    return this.booksSubject.value.find((item) => item.id === itemId) || null;
   }
 }
 
@@ -161,4 +186,6 @@ export interface Book {
   author: string;
   image: string;
   price: number;
+  quantity?: any;
+  totalPrice?: any;
 }
