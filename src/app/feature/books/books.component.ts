@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CartService } from '../cart/cart.service';
-import { BookService, Book } from '../book.service';
-import { SearchService } from '../search/search.service';
+import { CartService } from '../../cart/cart.service';
+import { BookService, Book } from '../../book.service';
+import { SearchService } from '../../search/search.service';
 
 @Component({
   selector: 'app-books',
@@ -36,9 +36,7 @@ export class BooksComponent implements OnInit, OnDestroy {
     this.searchService.searchQuery$.subscribe(query => {
       this.filterResults(query.author, query.title);
 
-      // console.log(query.author, query.title)
     });
-    // this.filterBooks();
   }
 
   ngOnDestroy() {
@@ -70,21 +68,4 @@ export class BooksComponent implements OnInit, OnDestroy {
       );
     }
   }
-
-  // searchBooks() {
-  //   this.filterBooks();
-  // }
-
-  // private filterBooks() {
-  //   if (this.searchQuery.trim() !== '') {
-  //     const query = this.searchQuery.toLowerCase();
-  //     this.filteredBooksByBookName = this.books.filter(
-  //       (book) =>
-  //         book.name.toLowerCase().includes(query) ||
-  //         book.author.toLowerCase().includes(query)
-  //     );
-  //   } else {
-  //     this.filteredBooksByBookName = [...this.books];
-  //   }
-  // }
 }

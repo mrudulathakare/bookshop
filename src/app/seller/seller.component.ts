@@ -1,7 +1,9 @@
-import { BooksComponent } from './../books/books.component';
+import { BooksComponent } from '../feature/books/books.component';
 import { Component, OnInit } from '@angular/core';
 import { BookService, Book } from '../book.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SellerService } from './seller.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-seller',
@@ -10,17 +12,28 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class SellerComponent {
   bookForm!: FormGroup;
+  books: Array<Book> = [];
+  private booksSubscription!: Subscription;
+
+  form: any = {
+    name: "",
+    author: "",
+    price: 0,
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"
+  }
 
   constructor(
     private formBuilder: FormBuilder,
-    private bookService: BookService
-  ) {}
+    private bookService: BookService,
+    private sellerService: SellerService
+  ) { }
 
   ngOnInit() {
-    this.initializeForm();
-    this.loadBooks();
+
+    this.booksSubscription = this.bookService.books$.subscribe((books: any) => {
+      this.books = books;
+    });
   }
-  books: Book[] = this.bookService.getBooks();
 
   initializeForm() {
     this.bookForm = this.formBuilder.group({
@@ -31,35 +44,24 @@ export class SellerComponent {
     });
   }
 
-  loadBooks() {
-    this.books = this.bookService.getBooks();
-  }
-
-  addBook() {
-    if (this.bookForm.valid) {
-      const newBook: Book = {
-        id: this.generateUniqueId(),
-        name: this.bookForm.value.name,
-        author: this.bookForm.value.author,
-        image: this.bookForm.value.image,
-        price: this.bookForm.value.price,
-      };
-      this.bookService.addBook(newBook);
-      this.loadBooks();
-      this.bookForm.reset();
-    }
-  }
 
   removeBook(bookId: number) {
-    this.bookService.removeBook(bookId);
-    this.loadBooks();
+    this.sellerService.deleteBook(bookId);
   }
 
-  editBook(updatedBook: Book) {
-    this.bookService.editBook(updatedBook);
-    this.loadBooks();
-  }
   private generateUniqueId(): number {
     return new Date().getTime() + Math.floor(Math.random() * 1000);
+  }
+
+  submit() {
+    if (!this.form.name || !this.form.author || !this.form.price || !this.form.image) {
+      alert("Please fill necessary fields");
+      return;
+    }
+    this.sellerService.submitEdit(this.form, this.generateUniqueId());
+  }
+
+  ngOnDestroy(): void {
+    this.booksSubscription.unsubscribe();
   }
 }

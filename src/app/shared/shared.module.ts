@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedComponent } from './shared/shared.component';
-import { SharedPipe } from './shared.pipe';
+import { TransformPipe } from './transform.pipe';
 
 @NgModule({
-  declarations: [SharedPipe],
-  imports: [CommonModule],
-  exports: [SharedPipe],
+  declarations: [
+  ],
+  imports: [
+    CommonModule,
+    TransformPipe
+  ],
+  exports: [
+    TransformPipe
+  ]
 })
-export class SharedModule {}
+export class SharedModule { }

@@ -166,6 +166,15 @@ export class BookService {
       this.setLocalBooks(updatedBooks);
     }
   }
+
+  updateBooks(books: Array<Book>) {
+    localStorage.setItem('books', JSON.stringify(books));
+    this.booksSubject.next(books);
+  }
+
+  getBookById(itemId: number) {
+    return this.booksSubject.value.find((item) => item.id === itemId) || null;
+  }
 }
 
 export interface Book {
@@ -174,4 +183,6 @@ export interface Book {
   author: string;
   image: string;
   price: number;
+  quantity?: any;
+  totalPrice?: any
 }

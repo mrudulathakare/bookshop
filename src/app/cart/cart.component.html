@@ -1,4 +1,107 @@
-<div class="cart">
+<div class="container py-5" *ngIf="cartItems.length !== 0">
+  <div class="row d-flex justify-content-center ">
+    <div class="col-md-8">
+      <div class="card mb-4 h-[80vh] overflow-y-scroll">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Cart - {{cartItems.length}} items</h5>
+        </div>
+        <div class="card-body p-0" *ngFor="let item of cartItems">
+          <div class="row d-flex justify-content-between align-items-center w-full">
+            <div class="col-lg-2 col-md-2 col-xl-2 mb-lg-0">
+              <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                <img src={{item.image}} class="img-fluid"
+                  alt="Blue Jeans Jacket" />
+              </div>
+            </div>
+
+            <div class="col-md-3 col-lg-3 col-xl-3 flex justify-center flex-col h-full">
+              <p class="text-sm">{{item.name}}</p>
+              <p class="text-xs">{{item.author}}</p>
+            </div>
+
+            <div class="col-md-2 col-lg-2 col-xl-2 flex justify-center items-center flex-col h-full">
+              <div class="mb-auto font-semibold">
+                Price
+              </div>
+              <div class="text-sm">₹{{item.price}}</div>
+            </div>
+
+            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+              <div class="d-flex justify-center items-center">
+                <button class="btn btn-link px-2" (click)="reduceItemQuantity(item.id)">
+                  <i class="fas fa-minus text-black text-xs"></i>
+                </button>
+    
+                <input id="form1" min="1" name="quantity" value={{item.quantity}} type="number"
+                  class="form-control form-control-sm shadow-none rounded-none p-0 m-0 text-sm w-16 h-10" />
+    
+                <button class="btn btn-link px-2" (click)='addItemQuantity(item.id)'>
+                  <i class="fas fa-plus text-black text-xs"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-md-2 col-lg-2 col-xl-2 flex justify-center items-center flex-col h-full">
+              <div class="mb-auto font-semibold">
+                Total
+              </div>
+              <div class="text-sm">₹{{item.totalPrice}}</div>
+            </div>
+
+            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+              <button type="button" (click)="removeFromCart(item.id)" class="text-danger"><i
+                  class="fas fa-trash fa-lg"></i></button>
+            </div>
+          </div>
+          <!-- Single item -->
+
+          <hr />
+
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Summary</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+              Products
+              <span>₹{{totalPrice}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              Shipping
+              <span>₹112</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+              <div>Grand Total:
+              </div>
+              <span><strong>₹{{totalPrice + 112}}</strong></span>
+            </li>
+          </ul>
+
+          <button type="button" routerLink="/" class="btn btn-primary btn-lg btn-block">
+            Go to checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="cartItems.length === 0" class="flex justify-center items-center h-[90vh]">
+
+  <h2>
+    Cart is Empty
+  </h2>
+
+</div>
+
+<!-- <div class="cart">
   <h2 class="text-2xl font-semibold mb-4">My Cart</h2>
   <table class="w-full border-collapse">
     <thead>
@@ -15,22 +118,28 @@
         <td class="px-4 py-2 border">{{ item.name }}</td>
         <td class="px-4 py-2 border">{{ item.price }}</td>
         <td class="px-4 py-2 border">
-          <input
-            type="number"
-            [(ngModel)]="quantity[i]"
-            class="w-16 border rounded px-2 py-1"
-          />
+          <div class="d-flex justify-center items-center">
+            <button class="btn btn-link px-2" (click)="reduceItemQuantity(item.id)">
+              <i class="fas fa-minus text-black text-xs"></i>
+            </button>
+
+            <input id="form1" min="1" name="quantity" value={{item?.quantity}} type="number"
+              class="form-control form-control-sm shadow-none rounded-none p-0 m-0 text-xs w-10" />
+
+            <button class="btn btn-link px-2" (click)='addItemQuantity(item.id)'>
+              <i class="fas fa-plus text-black text-xs"></i>
+            </button>
+          </div>
+
         </td>
-        <td class="px-4 py-2 border">{{ item.price * quantity[i] }}</td>
+        <td class="px-4 py-2 border">{{ item.totalPrice }}</td>
         <td class="px-4 py-2 border">
-          <button
-            (click)="removeFromCart(item)"
-            class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
-          >
+          <button (click)="removeFromCart(item.id)"
+            class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:bg-red-600">
             Remove
           </button>
         </td>
       </tr>
     </tbody>
   </table>
-</div>
+</div> -->

@@ -1,9 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Book, BookService } from '../book.service'; // Import your BookService
 import { NgFor, NgIf } from '@angular/common';
 import { SearchService } from '../search/search.service';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [NgIf, NgFor, RouterLink]
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent implements OnDestroy, OnInit {
   isLoggedIn: boolean = false;
   showSearch: boolean = false;
   searchQuery: string = '';
@@ -20,10 +21,22 @@ export class HeaderComponent implements OnDestroy {
   searchSubscription: Subscription | undefined;
   searchPerformed: boolean = false;
 
-  constructor(private bookService: BookService, private searchService: SearchService) {} // Inject the BookService
+  constructor(private bookService: BookService, private searchService: SearchService, private authService: AuthService) {} // Inject the BookService
+
+  ngOnInit(): void {
+      (async () => {
+        await this.authService.initAuthStateListener();
+      })
+  }
 
   toggleSearch(): void {
     this.searchService.toggleSearch();
+  }
+
+  isAuthenticated(): boolean {
+    const isAuth = this.authService.isAuthenticated;
+
+    return isAuth;
   }
 
   searchBooks() {
@@ -31,10 +44,10 @@ export class HeaderComponent implements OnDestroy {
     this.searchResults = this.bookService.searchBooks(this.searchQuery);
   }
 
-  logout() {
-    // Implement your logout functionality here
-    alert('Logging out...');
+  logout(): any {
+    this.authService.logout();
   }
+
 
   ngOnDestroy(): void {
     // Unsubscribe from the search subscription when the component is destroyed

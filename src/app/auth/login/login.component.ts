@@ -24,43 +24,11 @@ export class LoginComponent {
 
   isLoading: boolean = false;
 
-  isAuthincated: boolean = false;
+  isAthenticated: boolean = false;
 
   login() {
-    if (this.isLoading) return;
-    this.isLoading = true;
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, this.form.email, this.form.password)
-      .then((userCredential) => {
-
-
-        const user = userCredential.user;
-        if (this.form.email == "seller@gmail.com") {
-          this.authService.isSeller = true;
-          this.router.navigate(['/seller']);
-
-        }
-        else
-          this.router.navigate([""]);
-
-      })
-      .catch((error) => {
-        alert("Login failed");
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      }).finally(() => (this.isLoading = false));
-
-
-    this.authService.login(this.form.email, this.form.password)
-      .subscribe(
-        () => {
-          this.router.navigate(['/home']);
-
-        },
-        (error: any) => {
-          this.errorMessage = 'Invalid username or password.';
-        }
-      );
+    
+    this.authService.login(this.form);
   }
 
 

@@ -1,0 +1,19 @@
+<app-search *ngIf="showSearch"></app-search>
+
+<div class="main-wrapper py-3 container-fluid bg-slate-100">
+  <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div *ngFor="let book of filteredData" class=" border rounded-md p-4 flex flex-col items-center bg-white">
+        <img [src]="book.image" [alt]="book.name" class="w-32 h-32 mb-4" />
+        <div class="flex flex-col items-center">
+          <p class="text-lg font-bold mb-2">{{ book.name | transform }}</p>
+          <p class="text-sm"><span class="font-semibold">Author:</span> {{ book.author | titlecase }}</p>
+          <p class="text-gray-600 mb-2">{{ book.price | currency : "INR" }}</p>
+          <button (click)="addToCart(book)"
+            class="px-4 py-2 bg-[#18bc9c] text-white rounded hover:bg-[#118971] focus:outline-none  focus:bg-[#118971]">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+
+  </div>
+</div>

@@ -1,10 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'shared',
+  name: 'transform',
+  standalone: true
 })
-export class SharedPipe implements PipeTransform {
+export class TransformPipe implements PipeTransform {
+
   transform(value: string): string {
     return value.toUpperCase();
   }
+
 }
