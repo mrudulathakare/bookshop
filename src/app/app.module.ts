@@ -20,12 +20,12 @@ import { FeatureModule } from './feature/feature.module';
 import { BookService } from './book.service';
 import { CartService } from './cart/cart.service';
 import { FeatureComponent } from './feature/feature/feature.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BookComponent,
-    HeaderComponent,
     CartComponent,
     SellerComponent,
     BooksComponent,
@@ -37,6 +37,8 @@ import { FeatureComponent } from './feature/feature/feature.component';
     AuthModule,
     ReactiveFormsModule,
     FeatureModule,
+    SearchComponent,
+    HeaderComponent,
     // RouterModule.forRoot(routes)
   ],
 

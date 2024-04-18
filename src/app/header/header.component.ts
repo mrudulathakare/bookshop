@@ -1,11 +1,16 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Book, BookService } from '../book.service'; // Import your BookService
+import { NgFor, NgIf } from '@angular/common';
+import { SearchService } from '../search/search.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
+  standalone: true,
+  imports: [NgIf, NgFor, RouterLink]
 })
 export class HeaderComponent implements OnDestroy {
   isLoggedIn: boolean = false;
@@ -15,10 +20,10 @@ export class HeaderComponent implements OnDestroy {
   searchSubscription: Subscription | undefined;
   searchPerformed: boolean = false;
 
-  constructor(private bookService: BookService) {} // Inject the BookService
+  constructor(private bookService: BookService, private searchService: SearchService) {} // Inject the BookService
 
-  toggleSearch() {
-    this.showSearch = !this.showSearch;
+  toggleSearch(): void {
+    this.searchService.toggleSearch();
   }
 
   searchBooks() {

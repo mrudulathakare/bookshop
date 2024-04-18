@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CartService } from '../cart/cart.service';
-import { BookService } from '../book.service';
-import { NavigationBarComponent } from '../navigation-bar/navigation-bar.component';
+import { BookService, Book } from '../book.service';
+import { SearchService } from '../search/search.service';
 
 @Component({
   selector: 'app-books',
@@ -9,56 +10,81 @@ import { NavigationBarComponent } from '../navigation-bar/navigation-bar.compone
   styleUrls: ['./books.component.css'],
 })
 export class BooksComponent implements OnInit, OnDestroy {
-  filteredBooks: Book[] = [];
-  searchQuery: any;
-  bookNameQuery: any;
-  filteredBooksByBookName!: Book[];
-  authorNameQuery: any;
-
-  ngOnInit() {
-    this.books = this.booksService.getBooks();
-  }
-
-  ngOnDestroy() {
-    this.booksService.setLocalBooks(this.books);
-  }
+  searchQuery: string = '';
+  books: Book[] = [];
+  filteredData: any = [];
+  wishlist: any[] = [];
+  showSearch = false;
+  private booksSubscription: Subscription | undefined;
 
   constructor(
     private cartService: CartService,
-    private booksService: BookService
+    private booksService: BookService,
+    private searchService: SearchService
   ) {}
 
-  books: Book[] = [];
-  wishlist: any[] = [];
+  ngOnInit() {
+    this.booksSubscription = this.booksService.books$.subscribe((books: Book[]) => {
+      this.books = books;
+      this.filteredData = books;
+    });
+    
+    this.searchService.showSearch$.subscribe(showSearch => {
+      this.showSearch = showSearch;
+    });
 
-  addToCart(book: any) {
+    this.searchService.searchQuery$.subscribe(query => {
+      this.filterResults(query.author, query.title);
+
+      // console.log(query.author, query.title)
+    });
+    // this.filterBooks();
+  }
+
+  ngOnDestroy() {
+    if (this.booksSubscription) {
+      this.booksSubscription.unsubscribe();
+    }
+    this.booksService.setLocalBooks(this.books);
+  }
+
+  addToCart(book: Book) {
     this.cartService.addToCart(book);
   }
 
-  // searchBooksByBookName() {
-  //   if (this.books) {
-  //     const query = this.bookNameQuery.toLowerCase();
-  //     this.filteredBooksByBookName = this.books.filter(book =>
-  //       book.name.toLowerCase().includes(query.substring(0, 3))
-  //     );
-  //   }
+  filterResults(author: string, book: string) {
+    console.log(author);
+    if (!author && !book) {
+      this.filteredData = this.booksService.getBooks();
+      return;
+    }
+
+    if (author) {
+      this.filteredData = this.booksService.getBooks().filter((item: Book) => {
+        return item?.author.toLowerCase().includes(author.toLowerCase());
+      });
+    } else if (book) {
+      this.filteredData = this.booksService.getBooks().filter((item: Book) => {
+        return item?.name.toLowerCase().includes(book.toLowerCase());
+      }
+      );
+    }
+  }
+
+  // searchBooks() {
+  //   this.filterBooks();
   // }
 
-  // searchBooksByAuthorName() {
-  //   if (this.books) {
-  //     const query = this.authorNameQuery.toLowerCase();
-  //     this.filteredBooksByBookName = this.books.filter(book =>
-  //       book.author.toLowerCase().includes(query.substring(0, 3))
+  // private filterBooks() {
+  //   if (this.searchQuery.trim() !== '') {
+  //     const query = this.searchQuery.toLowerCase();
+  //     this.filteredBooksByBookName = this.books.filter(
+  //       (book) =>
+  //         book.name.toLowerCase().includes(query) ||
+  //         book.author.toLowerCase().includes(query)
   //     );
+  //   } else {
+  //     this.filteredBooksByBookName = [...this.books];
   //   }
   // }
-  searchBooks() {}
-}
-
-interface Book {
-  id: number;
-  name: string;
-  author: string;
-  image: string;
-  price: number;
 }

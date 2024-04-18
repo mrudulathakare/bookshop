@@ -1,6 +1,8 @@
+<app-search *ngIf="showSearch"></app-search>
+
 <div class="grid grid-cols-3 gap-8">
   <div
-    *ngFor="let book of books"
+    *ngFor="let book of filteredData"
     class="border rounded-md p-4 flex flex-col items-center"
   >
     <img [src]="book.image" [alt]="book.name" class="w-32 h-32 mb-4" />
